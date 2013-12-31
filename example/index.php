@@ -10,7 +10,7 @@ require('../server/fetch-json.php');
 </head>
 <body>
 
-<div id="github-container">
+<div id="widget-container" style="width: 100px; height: 100px;">
 
 </div>
 
@@ -18,15 +18,20 @@ require('../server/fetch-json.php');
 
 <script>
 
-    if (!window.githubWidget) {
-        console.warn('The `window.githubWidget` gets created on the server.');
-        console.log('Set the json data to `window.githubWidget.stats`.');
+    if (!window.osrc) {
+        console.warn('The `window.osrc` gets created on the server.');
+        console.log('Set the json data to `window.osrc.stats`.');
     }
 
+    window.osrc.id = 'widget-container';
+
     // If these aren't set it will default to [200, 210]
-    window.githubWidget.width = 500;
-    window.githubWidget.height = 300;
-    window.githubWidget.id = 'github-container';
+    window.osrc.width = 500;
+    window.osrc.height = 300;
+
+    // Widths can also be percentages but you have to include the suffix '%'.
+//    window.osrc.width = "80%";
+//    window.osrc.height = "100%";
 
 </script>
 

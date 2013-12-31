@@ -1,6 +1,14 @@
 (function(window) {
-    var githubWidget = window.githubWidget,
-        stats = githubWidget.stats,
+    function parsePercent(string) {
+        return parseInt(string.substring(0, string.length-1, 10)) / 100;
+    }
+
+    function isPercent(string) {
+        return (string === string + '') ? string.indexOf('%') === string.length - 1 : false;
+    }
+
+    var widget = window.osrc,
+        stats = widget.stats,
         events = stats.usage.events,
         days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
         colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd'],
@@ -8,24 +16,26 @@
         defaults = {
             graphHeight: 210,
             graphWidth: 200,
-            id: 'github-container'
+            id: 'widget-container'
         },
-
-        svgHeight = githubWidget.height || defaults.graphHeight,
-        svgWidth = githubWidget.width || defaults.graphWidth,
-        bottomOffset = 21,
-        yOffset = svgHeight - bottomOffset,
-        xOffset,
-        rectHeight,
-        rectWidth = svgWidth/8.75,
-        textOffset = parseInt(rectWidth, 10)/ 2,
 
         svgDOMFragment = document.createDocumentFragment(),
         gDOMFragment = document.createDocumentFragment(),
         svgNode, lineNode, gNode, textNode, rectNode,
 
-        $githubContainer = (githubWidget.id) ? $('#' + githubWidget.id) : $('#' + defaults.id),
-        $svg, $line, $g, $text, $rect;
+        $widgetContainer = (widget.id) ? $('#' + widget.id) : $('#' + defaults.id),
+        $svg, $line, $g, $text, $rect,
+
+        height = widget.height,
+        width = widget.width,
+        svgHeight = (height) ? (isPercent(height)) ? $widgetContainer.outerHeight() * parsePercent(height): height : defaults.graphHeight,
+        svgWidth = (width) ? (isPercent(width)) ? $widgetContainer.outerWidth() * parsePercent(width) : width : defaults.graphWidth,
+        bottomOffset = 21,
+        yOffset = svgHeight - bottomOffset,
+        xOffset,
+        rectHeight,
+        rectWidth = svgWidth/8.75,
+        textOffset = parseInt(rectWidth, 10)/ 2;
 
     svgNode = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     $svg = $(svgNode).attr({
@@ -89,6 +99,6 @@
     }
 
     $svg[0].appendChild(svgDOMFragment);
-    $githubContainer.append($svg);
+    $widgetContainer.append($svg);
 
 })(this);

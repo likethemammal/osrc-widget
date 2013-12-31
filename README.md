@@ -11,7 +11,7 @@ Live Demo: http://jsfiddle.net/Likethemammal/B2s4q/
 
 The [json object](http://osrc.dfm.io/Likethemammal.json) from the Open Source Report Card site must be sent over through some sort of backend. The browser isn't allowed access to an external json object by using either a `script` tag or using AJAX.
 
-In the `server` directory there is a setup for a PHP backend but really any backend can be used as long as it can send the json blob from the `http://osrc.dfm.io/[your user name here].json` link to the `window` object. This should be stored at `window.githubWidget.stats`.
+In the `server` directory there is a setup for a PHP backend but really any backend can be used as long as it can send the json blob from the `http://osrc.dfm.io/[your user name here].json` link to the `window` object. This should be stored at `window.osrc.stats`.
 
 #####PHP example: 
 ```php
@@ -20,11 +20,11 @@ In the `server` directory there is a setup for a PHP backend but really any back
 $url = "http://osrc.dfm.io/Likethemammal.json";
 $JSON = file_get_contents($url);
 
-echo "<script>  window.githubWidget = {}; window.githubWidget.stats = $JSON;  </script>";
+echo "<script>  window.osrc = { stats: $JSON };  </script>";
 
 ```
 
-The `id` property needs to be set on the `githubWidget` object as well to define what element the widget's container will be. If none is set it will use `#github-container` by default. The `examples` directory has sample code.
+The `id` property needs to be set on the `osrc` object as well to define what element the widget's container will be. If none is set it will use `#widget-container` by default. The `examples` directory has sample code.
 
 ##Options 
 
@@ -32,16 +32,20 @@ The `id` property needs to be set on the `githubWidget` object as well to define
 
 ![alt text](http://imgur.com/UsPeJVT.png?1 "Scaling example. [500, 300]")
 
-The `height` and `width` of the chart can be scaled to any size in px. Just set the properties on the `githubWidget` object before you drop in the script.
+The `height` and `width` of the chart can be scaled to any size in pixels or percentages. Just set the properties on the `osrc` object before you drop in the script.
 
 ```html
 <script>
 
-    window.githubWidget.id = 'github-container';
+    window.osrc.id = 'widget-container';
 
     // If these aren't set it will default to [200, 210]
-    window.githubWidget.width = 500;
-    window.githubWidget.height = 300;
+    window.osrc.width = 500;
+    window.osrc.height = 300;
+
+    // Percentages can also be used, but the '%' suffix must be included.
+//    window.osrc.width = "80%";
+//    window.osrc.height = "100%";
 
 </script>
 

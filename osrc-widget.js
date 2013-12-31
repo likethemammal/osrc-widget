@@ -1,10 +1,16 @@
 (function(window) {
-    var githubInfo = window.githubJSON,
+    var githubInfo = window.githubWidget.stats,
         days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
         colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd'],
         events = githubInfo.usage.events,
-        svgHeight = 210,
-        svgWidth = 800,
+
+        defaults = {
+            graphHeight: 210,
+            graphWidth: 200
+        },
+
+        svgHeight = window.githubWidget.height || defaults.graphHeight,
+        svgWidth = window.githubWidget.width || defaults.graphWidth,
         bottomOffset = 21,
         yOffset = svgHeight - bottomOffset,
         xOffset,
@@ -12,6 +18,8 @@
         rectWidth = svgWidth/8.75,
         textOffset = parseInt(rectWidth, 10)/ 2,
 
+        svgDOMFragment = document.createDocumentFragment(),
+        gDOMFragment = document.createDocumentFragment(),
         svgNode, lineNode, gNode, textNode, rectNode,
 
         $githubContainer = $('#github-container'),
@@ -29,7 +37,7 @@
         strokeWidth: '1px'
     });
 
-    $svg.append($line);
+    svgDOMFragment.appendChild($line[0]);
 
     for (var i = 0; i < days.length; i++) {
         yOffset = svgHeight - bottomOffset;
@@ -52,11 +60,10 @@
                 color: '#222'
             });
 
-        $svg.append($g);
-        $g.append($text);
+        gDOMFragment.appendChild($text[0]);
 
         for (var j = 0; j < colors.length; j++) {
-            rectHeight = events[j].week[i]*5;
+            rectHeight = events[j].week[i]*(svgHeight/42);
             yOffset -= rectHeight;
 
             rectNode = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -72,10 +79,14 @@
                     fill: colors[j]
                 });
 
-            $g.append($rect);
+            gDOMFragment.appendChild($rect[0]);
         }
+
+        $g[0].appendChild(gDOMFragment);
+        svgDOMFragment.appendChild($g[0]);
     }
 
+    $svg[0].appendChild(svgDOMFragment);
     $githubContainer.append($svg);
 
 })(this);

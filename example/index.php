@@ -26,6 +26,7 @@ require('../server/fetch-json.php');
     // If these aren't set it will default to [200, 210]
     window.githubWidget.width = 500;
     window.githubWidget.height = 300;
+    window.githubWidget.id = 'github-container';
 
 </script>
 

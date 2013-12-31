@@ -1,16 +1,18 @@
 (function(window) {
-    var githubInfo = window.githubWidget.stats,
+    var githubWidget = window.githubWidget,
+        stats = githubWidget.stats,
+        events = stats.usage.events,
         days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
         colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd'],
-        events = githubInfo.usage.events,
 
         defaults = {
             graphHeight: 210,
-            graphWidth: 200
+            graphWidth: 200,
+            id: 'github-container'
         },
 
-        svgHeight = window.githubWidget.height || defaults.graphHeight,
-        svgWidth = window.githubWidget.width || defaults.graphWidth,
+        svgHeight = githubWidget.height || defaults.graphHeight,
+        svgWidth = githubWidget.width || defaults.graphWidth,
         bottomOffset = 21,
         yOffset = svgHeight - bottomOffset,
         xOffset,
@@ -22,7 +24,7 @@
         gDOMFragment = document.createDocumentFragment(),
         svgNode, lineNode, gNode, textNode, rectNode,
 
-        $githubContainer = $('#github-container'),
+        $githubContainer = (githubWidget.id) ? $('#' + githubWidget.id) : $('#' + defaults.id),
         $svg, $line, $g, $text, $rect;
 
     svgNode = document.createElementNS('http://www.w3.org/2000/svg', 'svg');

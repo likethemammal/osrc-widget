@@ -4,26 +4,27 @@
         colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd'],
         events = githubInfo.usage.events,
         svgHeight = 210,
-        svgWidth = 200,
+        svgWidth = 800,
         bottomOffset = 21,
         yOffset = svgHeight - bottomOffset,
         xOffset,
         rectHeight,
-        rectWidth = '24.285714285714285',
+        rectWidth = svgWidth/8.75,
         textOffset = parseInt(rectWidth, 10)/ 2,
+
+        svgNode, lineNode, gNode, textNode, rectNode,
 
         $githubContainer = $('#github-container'),
         $svg, $line, $g, $text, $rect;
 
-
-    $svg = $('svg').attr({
+    svgNode = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    $svg = $(svgNode).attr({
         width: svgWidth,
         height: svgHeight
     });
 
-    var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-
-    $line = $(line).attr({x1: 0, x2: svgWidth, y1: yOffset, y2: yOffset + 1}).css({
+    lineNode = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    $line = $(lineNode).attr({x1: 0, x2: svgWidth, y1: yOffset, y2: yOffset + 1}).css({
         stroke: '#222',
         strokeWidth: '1px'
     });
@@ -32,15 +33,13 @@
 
     for (var i = 0; i < days.length; i++) {
         yOffset = svgHeight - bottomOffset;
-        xOffset = ((i*2)+1)*12+(i*2);
+        xOffset = ((i*2) + 1) * rectWidth/2 + (i*2);
 
-        var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        gNode = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        $g = $(gNode).attr('transform', 'translate(' + xOffset + ')');
 
-        $g = $(g).attr('transform', 'translate(' + xOffset + ')');
-
-        var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-
-        $text = $(text)
+        textNode = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        $text = $(textNode)
             .text(days[i])
             .attr({
                 y: yOffset + 2,
@@ -60,10 +59,8 @@
             rectHeight = events[j].week[i]*5;
             yOffset -= rectHeight;
 
-            console.log(rectHeight, i);
-
-            var rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-            $rect = $(rect)
+            rectNode = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            $rect = $(rectNode)
                 .attr({
                     width: rectWidth,
                     height: rectHeight,

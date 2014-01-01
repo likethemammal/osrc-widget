@@ -1,0 +1,36 @@
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+
+<div id="widget-container" style="width: 100px; height: 100px;">
+
+</div>
+
+</body>
+
+<script>
+
+    window.osrc = {
+        id: 'widget-container',
+        // If these aren't set it will default to [200, 204]
+        width: 500,
+        height: 300
+    };
+
+    function myCallback(data) {
+        window.osrc.stats = data;
+    }
+
+    // Widths can also be percentages but you have to include the suffix '%'.
+//    window.osrc.width = "80%";
+//    window.osrc.height = "100%";
+
+</script>
+<script src="http://osrc.dfm.io/likethemammal.json?callback=myCallback"></script>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="../osrc-widget.js"></script>
+
+</html>

@@ -1,7 +1,7 @@
 osrc-widget
 ===========
 
-![alt text](http://imgur.com/gn2evFv.png?1 "Likethemammal's chart")
+![alt text](http://imgur.com/NiRRRWu.png?1 "Likethemammal's chart")
 
 A widget version of the graphs that get generated from the [Open Source Report Card](http://osrc.dfm.io/Likethemammal) site.
 

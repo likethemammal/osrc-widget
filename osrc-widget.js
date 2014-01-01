@@ -12,47 +12,92 @@
         events = stats.usage.events,
         days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
         colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd'],
+        titles = ['Push', 'Watch', 'Create', 'Follow', 'Pull Request'],
 
         defaults = {
-            graphHeight: 210,
             graphWidth: 200,
+            graphHeight: 204,
             id: 'widget-container'
         },
 
-        svgDOMFragment = document.createDocumentFragment(),
+        legendDOMFragment = document.createDocumentFragment(),
+        chartDOMFragment = document.createDocumentFragment(),
         gDOMFragment = document.createDocumentFragment(),
-        svgNode, lineNode, gNode, textNode, rectNode,
+        legendNode, chartNode, lineNode, gNode, titleNode, textNode, rectNode,
 
         $widgetContainer = (widget.id) ? $('#' + widget.id) : $('#' + defaults.id),
-        $svg, $line, $g, $text, $rect,
+        $legend, $chart, $line, $g, $title, $text, $rect,
 
         height = widget.height,
         width = widget.width,
-        svgHeight = (height) ? (isPercent(height)) ? $widgetContainer.outerHeight() * parsePercent(height): height : defaults.graphHeight,
-        svgWidth = (width) ? (isPercent(width)) ? $widgetContainer.outerWidth() * parsePercent(width) : width : defaults.graphWidth,
+        chartHeight = (height) ? (isPercent(height)) ? $widgetContainer.outerHeight() * parsePercent(height): height : defaults.graphHeight,
+        chartWidth = (width) ? (isPercent(width)) ? $widgetContainer.outerWidth() * parsePercent(width) : width : defaults.graphWidth,
+        legendHeight = chartHeight/6,
+        legendWidth = chartWidth,
+        chartHeight = chartHeight - legendHeight, //Reset chartHeight to include legend
+        legendSectionSize = (legendHeight/3 < (legendWidth/3)/titles.length) ? legendHeight/3 : (legendWidth/3)/titles.length,
+
         bottomOffset = 21,
-        yOffset = svgHeight - bottomOffset,
+        yOffsetOriginal = chartHeight - bottomOffset,
+        yOffset = yOffsetOriginal,
         xOffset,
         rectHeight,
-        rectWidth = svgWidth/8.75,
+        rectWidth = chartWidth/8.75,
         textOffset = parseInt(rectWidth, 10)/ 2;
 
-    svgNode = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    $svg = $(svgNode).attr({
-        width: svgWidth,
-        height: svgHeight
+    legendNode = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    $legend = $(legendNode).attr({
+        width: legendWidth,
+        height: legendHeight
+    });
+
+    chartNode = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    $chart = $(chartNode).attr({
+        width: chartWidth,
+        height: chartHeight
     });
 
     lineNode = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    $line = $(lineNode).attr({x1: 0, x2: svgWidth, y1: yOffset, y2: yOffset + 1}).css({
+    $line = $(lineNode).attr({x1: 0, x2: chartWidth, y1: yOffset, y2: yOffset + 1}).css({
         stroke: '#222',
         strokeWidth: '1px'
     });
 
-    svgDOMFragment.appendChild($line[0]);
+    chartDOMFragment.appendChild($line[0]);
+
+    for (var q = 0; q < titles.length; q++) {
+        gNode = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        $g = $(gNode)
+            .attr({
+                transform: 'translate(' + legendWidth*(q/titles.length) + ',' + legendSectionSize + ')'
+            });
+
+        titleNode = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+        $title = $(titleNode).text(titles[q]);
+
+        rectNode = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        $rect = $(rectNode)
+            .attr({
+                width: legendSectionSize,
+                height: legendSectionSize,
+                x: ((legendWidth/3)/titles.length)/2
+            }).css({
+                fillOpacity: .8,
+                fill: colors[q],
+                cursor: 'pointer'
+            });
+
+        $g.append($title);
+        $g.append($rect);
+
+        legendDOMFragment.appendChild($g[0]);
+    }
+
+    $legend[0].appendChild(legendDOMFragment);
+    $widgetContainer.append($legend);
 
     for (var i = 0; i < days.length; i++) {
-        yOffset = svgHeight - bottomOffset;
+        yOffset = yOffsetOriginal;
         xOffset = ((i*2) + 1) * rectWidth/2 + (i*2);
 
         gNode = document.createElementNS('http://www.w3.org/2000/svg', 'g');
@@ -75,7 +120,7 @@
         gDOMFragment.appendChild($text[0]);
 
         for (var j = 0; j < colors.length; j++) {
-            rectHeight = events[j].week[i]*(svgHeight/42);
+            rectHeight = events[j].week[i]*(chartHeight/42);
             yOffset -= rectHeight;
 
             rectNode = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
@@ -95,10 +140,10 @@
         }
 
         $g[0].appendChild(gDOMFragment);
-        svgDOMFragment.appendChild($g[0]);
+        chartDOMFragment.appendChild($g[0]);
     }
 
-    $svg[0].appendChild(svgDOMFragment);
-    $widgetContainer.append($svg);
+    $chart[0].appendChild(chartDOMFragment);
+    $widgetContainer.append($chart);
 
 })(this);

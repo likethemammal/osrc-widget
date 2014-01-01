@@ -25,7 +25,7 @@ require('../server/fetch-json.php');
 
     window.osrc.id = 'widget-container';
 
-    // If these aren't set it will default to [200, 210]
+    // If these aren't set it will default to [200, 204]
     window.osrc.width = 500;
     window.osrc.height = 300;
 

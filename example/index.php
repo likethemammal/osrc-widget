@@ -7,6 +7,47 @@ require('../server/fetch-json.php');
 <html>
 <head>
     <title></title>
+    <style>
+
+        g, svg {
+            -webkit-transition: all 500ms ease-in;
+            -moz-transition: all 500ms ease-in;
+            -ms-transition: all 500ms ease-in;
+            -o-transition: all 500ms ease-in;
+            transition: all 500ms ease-in;
+        }
+
+        /*.anim {*/
+            /*-webkit-animation-name: glow-blue;*/
+            /*-webkit-animation-duration: 1s;*/
+            /*-webkit-animation-iteration-count: infinite;*/
+            /*-webkit-animation-timing-function: ease-in-out;*/
+            /*-webkit-animation-direction: alternate;*/
+
+            /*animation-name: glow-blue;*/
+            /*animation-duration: 1s;*/
+            /*animation-iteration-count: 1;*/
+            /*animation-timing-function: ease-in-out;*/
+            /*animation-direction: alternate;*/
+
+            /*-moz-animation: none;*/
+        /*}*/
+
+        @-webkit-keyframes hide {
+            0% {
+                -webkit-transform: scale(1) translateY(5px);
+                transform: scale(1) translateY(5px);
+            }
+            100% {
+                -moz-transform: scale(0) translateY(165px);
+                -webkit-transform: scale(0) translateY(165px);
+                -o-transform: scale(0) translateY(165px);
+                -ms-transform: scale(0) translateY(165px);
+                transform: scale(0) translateY(165px)
+            }
+        }
+
+    </style>
 </head>
 <body>
 

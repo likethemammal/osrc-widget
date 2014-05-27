@@ -1,0 +1,69 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.8/angular.min.js"></script>
+    <title></title>
+    
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="osrc-widget.js"></script>
+
+    <script>
+    
+        var osrcApp = angular.module('osrcApp', []);
+    
+        osrcApp.controller('WidgetCtrl', ['$scope', '$http', function($scope, $http) {
+            $scope.userList = ['chriscoyier','paulirish','Likethemammal'];
+            $scope.sortBy = '-name';
+            var userData = [],
+                userListLength = $scope.userList.length,
+                username;
+
+            for (var i = 0; i < userListLength; i++) {
+                username = $scope.userList[i];
+                
+                $http.jsonp('http://osrc.dfm.io/' + username + '.json?callback=JSON_CALLBACK').success(function(data) {
+                    userData.push(data);
+                                        
+                    if (userData.length === userListLength) {
+                        $scope.userData = userData;
+                    }
+                });
+
+            }
+            
+            $scope.makeGraph = Graph;
+            
+        }]);            
+            
+    </script>
+</head>
+<body ng-app="osrcApp">
+
+    <div id="page-container" ng-controller="WidgetCtrl">
+    
+        <div class="widget" ng-repeat="user in userData | orderBy : sortBy: true">
+          <h3 class="widget-username">{{ user.name }}</h3>
+          <div id="{{ user.username }}-widget-container" class="widget-container"></div>
+          {{ makeGraph(user.username, user.usage.events) }}
+        </div>
+        
+
+    </div>
+
+</body>
+
+
+<script>
+
+    window.osrc = {
+        width: 400,
+        height: 400
+    }
+
+    // Widths can also be percentages but you have to include the suffix '%'.
+//    window.osrc.width = "80%";
+//    window.osrc.height = "100%";
+
+</script>
+
+
+</html>

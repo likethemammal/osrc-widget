@@ -1,8 +1,4 @@
-(function(window) {
-    window.jsonCallback = function(json) {
-        window.osrc.stats = json;
-        var graph = new Graph();
-    }
+(function(window) {        
     
     function parsePercent(string) {
         return parseInt(string.substring(0, string.length-1, 10)) / 100;
@@ -12,23 +8,16 @@
         return (string === string + '') ? string.indexOf('%') === string.length - 1 : false;
     }
     
-    var script = document.createElement('script'),
-        head = document.getElementsByTagName('head')[0];
-        
-        script.src = "http://osrc.dfm.io/" + window.osrc.username + ".json?callback=jsonCallback";
-        head.appendChild(script);
-
-    function Graph() {
-        
+    function graph(username, events) {
+                                                        
         var widget = window.osrc,
-            events = widget.stats.usage.events,
             days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
             colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd'],
             titles = ['Push', 'Watch', 'Create', 'Follow', 'Pull Request'],
             svgNamespace = 'http://www.w3.org/2000/svg',
     
             defaults = {
-                graphWidth: 200,
+                graphWidth: 200 ,
                 graphHeight: 204,
                 id: 'widget-container'
             },
@@ -36,9 +25,11 @@
             legendDOMFragment = document.createDocumentFragment(),
             chartDOMFragment = document.createDocumentFragment(),
             gDOMFragment = document.createDocumentFragment(),
+            graphNode,
             legendNode, chartNode, lineNode, gNode, titleNode, textNode, rectNode,
     
-            $widgetContainer = (widget.id) ? $('#' + widget.id) : $('#' + defaults.id),
+            $widgetContainer = $('#' + username + '-widget-container'),            
+            $innerContainer = $(document.createElement('div')),
             $legend, $chart, $line, $g, $title, $text, $rect,
     
             height = widget.height,
@@ -58,7 +49,7 @@
             rectHeight,
             rectWidth = chartWidth/8.75,
             textOffset = parseInt(rectWidth, 10)/ 2;
-            
+                        
         (function analyzeData() {
             var days = [0,0,0,0,0,0,0],
                 mostEvents = 0;
@@ -129,7 +120,7 @@
             }
         
             $legend[0].appendChild(legendDOMFragment);
-            $widgetContainer.append($legend);
+            $innerContainer.append($legend);
             
         })();
             
@@ -183,8 +174,13 @@
             }
     
             $chart[0].appendChild(chartDOMFragment);
-            $widgetContainer.append($chart);
+            $innerContainer.append($chart);
+            $widgetContainer.html($innerContainer[0]);
             
-        })();  
+        })(); 
+                
     }
+    
+    window.Graph = graph;    
+    
 })(this);

@@ -1,10 +1,15 @@
 <html>
 <head>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.8/angular.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="../libs/angular.min.js"></script>
     <title></title>
     
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="../libs/jquery.min.js"></script>
     <script src="osrc-widget.js"></script>
+    
+    <link href="../libs/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 
     <script>
     
@@ -40,12 +45,40 @@
 
     <div id="page-container" ng-controller="WidgetCtrl">
     
-        <div class="widget" ng-repeat="user in userData | orderBy : sortBy: true">
-          <h3 class="widget-username">{{ user.name }}</h3>
-          <div id="{{ user.username }}-widget-container" class="widget-container"></div>
-          {{ makeGraph(user.username, user.usage.events) }}
+        <div class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand">OSRC Widget</a>
+                </div>
+                <ul class="nav navbar-nav navbar-collapse collapse">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="osrc.dfm.io">OSRC</a></li>
+                    <li><a href="http://github.com/likethemammal/osrc-widget">Github</a></li>
+                </ul>
+            </div>
         </div>
         
+        <div class="jumbotron">
+            <div class="container">
+                <h1>Hello, world!</h1>
+                <p>This is a template for a simple marketing or informational website. It includes a large callout called a jumbotron and three supporting pieces of content. Use it as a starting point to create something more unique.</p>
+                <p><a class="btn btn-primary btn-lg" role="button">Learn more »</a></p>
+           </div>
+       </div>
+        
+      <div class="container">    
+        
+        <div class="row">
+            <div class="widget col-6 col-sm-4 col-m-6 col-lg-4" ng-repeat="user in userData | orderBy : sortBy: true">
+              <h3 class="widget-username">{{ user.name }}</h3>
+              <div id="{{ user.username }}-widget-container" class="widget-container"></div>
+              {{ makeGraph(user.username, user.usage.events) }}
+            </div>
+        </div>
+
+        
+      </div>
 
     </div>
 
@@ -55,8 +88,7 @@
 <script>
 
     window.osrc = {
-        width: 400,
-        height: 400
+        width: 313
     }
 
     // Widths can also be percentages but you have to include the suffix '%'.

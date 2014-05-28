@@ -16,7 +16,7 @@
         var osrcApp = angular.module('osrcApp', []);
     
         osrcApp.controller('WidgetCtrl', ['$scope', '$http', function($scope, $http) {
-            $scope.userList = ['chriscoyier','paulirish','Likethemammal'];
+            $scope.userList = ['chriscoyier','paulirish', 'MarcoPolo', 'Likethemammal', 'mediocregopher', 'fastest963', 'paullewis', 'addyosmani', 'mrdoob'];
             $scope.sortBy = '-name';
             var userData = [],
                 userListLength = $scope.userList.length,
@@ -27,6 +27,10 @@
                 
                 $http.jsonp('http://osrc.dfm.io/' + username + '.json?callback=JSON_CALLBACK').success(function(data) {
                     userData.push(data);
+                    
+                    if (data.name === 'Brian Picciano' || data.name === 'Chris ') {
+                        console.log(data);
+                    }
                                         
                     if (userData.length === userListLength) {
                         $scope.userData = userData;
@@ -88,7 +92,7 @@
 <script>
 
     window.osrc = {
-        width: 313
+        width: 400,
     }
 
     // Widths can also be percentages but you have to include the suffix '%'.

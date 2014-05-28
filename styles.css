@@ -11,3 +11,7 @@ body {
         width: 960px;
     }
 }
+
+.svg-container {
+    max-height: 250px;
+}

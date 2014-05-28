@@ -1,7 +1,7 @@
 (function(window) {        
     
     function parsePercent(string) {
-        return parseInt(string.substring(0, string.length-1, 10)) / 100;
+        return parseFloat(string.substring(0, string.length-1)) / 100;
     }
 
     function isPercent(string) {
@@ -16,12 +16,6 @@
             titles = ['Push', 'Watch', 'Create', 'Follow', 'Pull Request'],
             svgNamespace = 'http://www.w3.org/2000/svg',
     
-            defaults = {
-                graphWidth: 200 ,
-                graphHeight: 204,
-                id: 'widget-container'
-            },
-    
             legendDOMFragment = document.createDocumentFragment(),
             chartDOMFragment = document.createDocumentFragment(),
             gDOMFragment = document.createDocumentFragment(),
@@ -33,23 +27,20 @@
             $svg,
             $legend, $chart, $line, $g, $title, $text, $rect,
     
-            height = widget.height,
-            width = widget.width,
-            chartHeight = (height) ? (isPercent(height)) ? $widgetContainer.outerHeight() * parsePercent(height): height : defaults.graphHeight,
-            chartWidth = (width) ? (isPercent(width)) ? $widgetContainer.outerWidth() * parsePercent(width) : width : defaults.graphWidth,
-            legendHeight = 34,
-//             chartHeight = chartHeight - legendHeight, Reset chartHeight to include legend
-            legendSectionSize = legendHeight/3,
-            eventHeight,
+            legendHeight = '13%',
+            legendSectionSize = 34/3,
+            chartHeightPercentage = 100 - parseFloat(legendHeight),
+            chartWidthPercentage = 100,
+            eventHeightPercent,
     
-            bottomOffset = 21,
-            yOffsetOriginal = chartHeight - bottomOffset,
+            bottomOffset = '8.5%',
+            yOffsetOriginal = 100 - parseFloat(bottomOffset) + '%',
             yOffset = yOffsetOriginal,
             xOffset,
             rectHeight,
             rectWidth = '12%',
             textOffset = '6%';
-                        
+                                    
         (function analyzeData() {
             var days = [0,0,0,0,0,0,0],
                 mostEvents = 0;
@@ -66,7 +57,7 @@
                 
             }
             
-            eventHeight = chartHeight / mostEvents;
+            eventHeightPercent = parseFloat(yOffset) / mostEvents;
         })();
         
         (function setup() {
@@ -82,11 +73,11 @@
             chartNode = document.createElementNS(svgNamespace, 'svg');
             $chart = $(chartNode).attr({
                 width: '100%',
-                height: '100%'
+                height: chartHeightPercentage + '%'
             });
         
             lineNode = document.createElementNS(svgNamespace, 'line');
-            $line = $(lineNode).attr({x1: 0, x2: '100%', y1: yOffset, y2: yOffset + 1}).css({
+            $line = $(lineNode).attr({x1: 0, x2: '100%', y1: yOffset, y2: yOffset}).css({
                 stroke: '#222',
                 strokeWidth: '1px'
             });
@@ -99,14 +90,7 @@
                 $g = $(gNode);
                 
                 svgNode = document.createElementNS(svgNamespace, 'svg');
-                $svg = $(svgNode).attr('x', 100*(q/titles.length) + '%');
-                
-//                 $g = $(gNode)
-//                     .attr({
-//                         x: 100*(q/titles.length) + '%',
-//                         y: legendSectionSize + '%'
-//                     });
-                    
+                $svg = $(svgNode).attr('x', 100*(q/titles.length) + '%');                    
         
                 titleNode = document.createElementNS(svgNamespace, 'title');
                 $title = $(titleNode).text(titles[q]);
@@ -139,7 +123,7 @@
             
             for (var i = 0; i < days.length; i++) {
                 yOffset = yOffsetOriginal;
-                xOffset = (i*2) * parseInt(rectWidth, 10)/2 + (i*2) + 2 + '%';
+                xOffset = (i*2) * parseFloat(rectWidth)/2 + (i*2) + 2 + '%';
                         
                 gNode = document.createElementNS(svgNamespace, 'g');
                 $g = $(gNode);
@@ -151,7 +135,7 @@
                 $text = $(textNode)
                     .text(days[i])
                     .attr({
-                        y: yOffset + 2,
+                        y: parseFloat(yOffset) + 1 + '%',
                         x: textOffset,
                         'text-anchor': 'middle',
                         dy: '12'
@@ -166,8 +150,8 @@
                 for (var j = 0; j < colors.length; j++) {
                     
                     if (events[j]) {
-                        rectHeight = events[j].week[i]*eventHeight;
-                        yOffset -= rectHeight;
+                        rectHeight = events[j].week[i] * eventHeightPercent + '%';
+                        yOffset = parseFloat(yOffset) - parseFloat(rectHeight) +'%';
 
                         rectNode = document.createElementNS(svgNamespace, 'rect');
                         $rect = $(rectNode)
